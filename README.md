@@ -1,7 +1,4 @@
-# go
+# Phidget22 Library for gloang
 
-A collection of my go libraries. See the README for each library.
-
-## Contributing
-
-Fork, branch & pull request.
+Originally forked from [samuelkadolph/go](https://github.com/samuelkadolph/go)
+The original one was last updated 5 years ago, and was working with Phidget21. This repo is mostly going to follow the same the architecture but to update the CAPI to work with Phidget22.

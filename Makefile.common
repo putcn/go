@@ -1,6 +1,6 @@
 GO = go
 
-REPO = github.com/samuelkadolph/go
+REPO = github.com/putcn/go_phidgets
 SYMLINK = $(GOPATH)/src/$(REPO)
 TOP = $(dir $(lastword $(MAKEFILE_LIST)))
 

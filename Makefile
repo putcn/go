@@ -1,4 +1,4 @@
-PACKAGES = campfire httpstream nullable phidgets/raw phidgets
+PACKAGES = phidgets/raw phidgets
 FORMATS = $(addprefix fmt/,$(PACKAGES))
 TESTS = $(addprefix test/,$(PACKAGES))
 
