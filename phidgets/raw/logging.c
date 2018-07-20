@@ -1,5 +1,5 @@
 #include "logging.h"
 
-int _log(CPhidgetLog_level l, const char * id, const char * message) {
-  return CPhidget_log(l, id, message);
+int _log(Phidget_LogLevel l, const char * message) {
+  return PhidgetLog_log(l, message);
 }

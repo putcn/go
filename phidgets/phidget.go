@@ -1,8 +1,9 @@
 package phidgets
 
 import (
-	"github.com/samuelkadolph/go/phidgets/raw"
 	"time"
+
+	"github.com/putcn/go_phidgets/phidgets/raw"
 )
 
 const (

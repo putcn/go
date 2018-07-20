@@ -28,7 +28,7 @@ onRawDataResult * onRawDataAwait(handler *h) {
   return (onRawDataResult *)handlerAwait(h);
 }
 
-int onCodeHandler(CPhidgetIRHandle ir, void *ptr, unsigned char *data, int dataLength, int bitCount, int repeat) {
+int onCodeHandler(PhidgetIRHandle ir, void *ptr, unsigned char *data, int dataLength, int bitCount, int repeat) {
   handler * h = (handler *)ptr;
 
   onCodeResult * r = calloc(1, sizeof(onCodeResult));
@@ -42,7 +42,7 @@ int onCodeHandler(CPhidgetIRHandle ir, void *ptr, unsigned char *data, int dataL
   return 0;
 }
 
-int onLearnHandler(CPhidgetIRHandle ir, void *ptr, unsigned char *data, int dataLength, CPhidgetIR_CodeInfoHandle codeInfo) {
+int onLearnHandler(PhidgetIRHandle ir, void *ptr, unsigned char *data, int dataLength, PhidgetIR_CodeInfo codeInfo) {
   handler * h = (handler *)ptr;
 
   onLearnResult * r = calloc(1, sizeof(onLearnResult));
@@ -55,7 +55,7 @@ int onLearnHandler(CPhidgetIRHandle ir, void *ptr, unsigned char *data, int data
   return 0;
 }
 
-int onRawDataHandler(CPhidgetIRHandle ir, void *ptr, int *data, int dataLength) {
+int onRawDataHandler(PhidgetIRHandle ir, void *ptr, int *data, int dataLength) {
   handler * h = (handler *)ptr;
 
   onRawDataResult * r = calloc(1, sizeof(onRawDataResult));
@@ -67,26 +67,26 @@ int onRawDataHandler(CPhidgetIRHandle ir, void *ptr, int *data, int dataLength) 
   return 0;
 }
 
-int setOnCodeHandler(CPhidgetIRHandle ir, handler *h) {
-  return CPhidgetIR_set_OnCode_Handler(ir, &onCodeHandler, h);
+int setOnCodeHandler(PhidgetIRHandle ir, handler *h) {
+  return PhidgetIR_setOnCodeHandler(ir, &onCodeHandler, h);
 }
 
-int setOnLearnHandler(CPhidgetIRHandle ir, handler *h) {
-  return CPhidgetIR_set_OnLearn_Handler(ir, &onLearnHandler, h);
+int setOnLearnHandler(PhidgetIRHandle ir, handler *h) {
+  return PhidgetIR_setOnLearnHandler(ir, &onLearnHandler, h);
 }
 
-int setOnRawDataHandler(CPhidgetIRHandle ir, handler *h) {
-  return CPhidgetIR_set_OnRawData_Handler(ir, &onRawDataHandler, h);
+int setOnRawDataHandler(PhidgetIRHandle ir, handler *h) {
+  return PhidgetIR_setOnRawDataHandler(ir, &onRawDataHandler, h);
 }
 
-void unsetOnCodeHandler(CPhidgetIRHandle ir) {
-  CPhidgetIR_set_OnCode_Handler(ir, NULL, NULL);
+void unsetOnCodeHandler(PhidgetIRHandle ir) {
+  PhidgetIR_setOnCodeHandler(ir, NULL, NULL);
 }
 
-void unsetOnLearnHandler(CPhidgetIRHandle ir) {
-  CPhidgetIR_set_OnLearn_Handler(ir, NULL, NULL);
+void unsetOnLearnHandler(PhidgetIRHandle ir) {
+  PhidgetIR_setOnLearnHandler(ir, NULL, NULL);
 }
 
-void unsetOnRawDataHandler(CPhidgetIRHandle ir) {
-  CPhidgetIR_set_OnRawData_Handler(ir, NULL, NULL);
+void unsetOnRawDataHandler(PhidgetIRHandle ir) {
+  PhidgetIR_setOnRawDataHandler(ir, NULL, NULL);
 }

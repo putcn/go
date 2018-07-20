@@ -16,7 +16,7 @@ type IR struct {
 	RawData <-chan IRRawData
 
 	code             chan IRCode
-	irHandle         C.CPhidgetIRHandle
+	irHandle         C.PhidgetIRHandle
 	learn            chan IRLearn
 	onCodeHandler    *C.handler
 	onLearnHandler   *C.handler
@@ -56,8 +56,8 @@ type IRRawData struct {
 }
 
 func NewIR() (*IR, error) {
-	ptr := new(C.CPhidgetIRHandle)
-	if err := result(C.CPhidgetIR_create(ptr)); err != nil {
+	ptr := new(C.PhidgetIRHandle)
+	if err := result(C.PhidgetIR_create(ptr)); err != nil {
 		return nil, err
 	}
 
@@ -76,7 +76,7 @@ func (i *IR) GetLastCode() ([]byte, int, error) {
 
 	*n = C.int(len(d))
 
-	if err := result(C.CPhidgetIR_getLastCode(i.irHandle, (*C.uchar)(&d[0]), n, c)); err != nil {
+	if err := result(C.PhidgetIR_getLastCode(i.irHandle, (*C.uchar)(&d[0]), n, c)); err != nil {
 		return nil, 0, err
 	}
 
@@ -90,13 +90,14 @@ func (i *IR) GetLastLearnedCode() ([]byte, IRCodeInfo, error) {
 
 	*n = C.int(len(d))
 
-	if err := result(C.CPhidgetIR_getLastLearnedCode(i.irHandle, (*C.uchar)(&d[0]), n, ci)); err != nil {
+	if err := result(C.PhidgetIR_getLastLearnedCode(i.irHandle, (*C.uchar)(&d[0]), n, ci)); err != nil {
 		return nil, IRCodeInfo{}, err
 	}
 
-	return d[:int(*n)], irCodeInfoFromC(C.CPhidgetIR_CodeInfoHandle(unsafe.Pointer(ci))), nil
+	return d[:int(*n)], irCodeInfoFromC(C.PhidgetIR_CodeInfo(unsafe.Pointer(ci))), nil
 }
 
+/* deprecated
 func (i *IR) GetRawData(max int) ([]int, error) {
 	d := make([]C.int, max)
 	n := new(C.int)
@@ -114,9 +115,10 @@ func (i *IR) GetRawData(max int) ([]int, error) {
 
 	return r, nil
 }
+*/
 
 func (i *IR) Transmit(data []byte, info IRCodeInfo) error {
-	return result(C.CPhidgetIR_Transmit(i.irHandle, (*C.uchar)(&data[0]), info.toC()))
+	return result(C.PhidgetIR_transmit(i.irHandle, (*C.uchar)(&data[0]), info.toC()))
 }
 
 func (i *IR) TransmitRaw(data []int, carrierFrequency, dutyCycle, gap int) error {
@@ -125,11 +127,11 @@ func (i *IR) TransmitRaw(data []int, carrierFrequency, dutyCycle, gap int) error
 		d[i] = C.int(v)
 	}
 
-	return result(C.CPhidgetIR_TransmitRaw(i.irHandle, (*C.int)(&d[0]), C.int(len(data)), C.int(carrierFrequency), C.int(dutyCycle), C.int(gap)))
+	return result(C.PhidgetIR_transmitRaw(i.irHandle, (*C.int)(&d[0]), C.int(len(data)), C.int(carrierFrequency), C.int(dutyCycle), C.int(gap)))
 }
 
 func (i *IR) TransmitRepeat() error {
-	return result(C.CPhidgetIR_TransmitRepeat(i.irHandle))
+	return result(C.PhidgetIR_transmitRepeat(i.irHandle))
 }
 
 func irCodeInfoFromC(ci C.CPhidgetIR_CodeInfoHandle) IRCodeInfo {
@@ -164,7 +166,7 @@ func (i *IR) initIR(h C.CPhidgetIRHandle) error {
 
 	i.irHandle = h
 
-	if err := i.initPhidget(C.CPhidgetHandle(h)); err != nil {
+	if err := i.initPhidget(C.PhidgetHandle(h)); err != nil {
 		return nil
 	}
 

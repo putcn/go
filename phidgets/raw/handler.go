@@ -1,5 +1,8 @@
 package raw
 
+// #include <stddef.h>
+// #cgo CFLAGS: -F /Library/Frameworks -framework Phidget22 -I /Library/Frameworks/Phidget22.framework/Headers
+
 // #include "handler.h"
 import "C"
 

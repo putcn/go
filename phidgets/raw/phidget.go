@@ -1,9 +1,9 @@
 package raw
 
-// #cgo darwin CFLAGS: -I/Library/Frameworks/Phidget21.framework/Headers
-// #cgo darwin LDFLAGS: -framework Phidget21
-// #cgo linux CFLAGS: -lphidget21
-// #cgo linux LDFLAGS: -lphidget21
+// #cgo darwin CFLAGS: -I/Library/Frameworks/Phidget22.framework/Headers
+// #cgo darwin LDFLAGS: -framework Phidget22
+// #cgo linux CFLAGS: -lphidget22
+// #cgo linux LDFLAGS: -lphidget22
 // #include "phidget.h"
 import "C"
 
@@ -24,13 +24,14 @@ const (
 type Status int
 
 const (
-	Attached    = C.PHIDGET_ATTACHED
-	NotAttached = C.PHIDGET_NOTATTACHED
+	Attached    = true
+	NotAttached = false
 )
 
 type Class int
 
 const (
+	NothingClass           = C.PHIDCLASS_NOTHING
 	AccelerometerClass     = C.PHIDCLASS_ACCELEROMETER
 	AdvancedServoClass     = C.PHIDCLASS_ADVANCEDSERVO
 	AnalogClass            = C.PHIDCLASS_ANALOG
@@ -38,9 +39,11 @@ const (
 	EncoderClass           = C.PHIDCLASS_ENCODER
 	FrequencyCounterClass  = C.PHIDCLASS_FREQUENCYCOUNTER
 	GPSClass               = C.PHIDCLASS_GPS
+	HubClass               = PHIDCLASS_HUB
 	InterfaceKitClass      = C.PHIDCLASS_INTERFACEKIT
 	IRClass                = C.PHIDCLASS_IR
 	LEDClass               = C.PHIDCLASS_LED
+	MeshDongleClass        = C.PHIDCLASS_MESHDONGLE
 	MotorControlClass      = C.PHIDCLASS_MOTORCONTROL
 	PHSensorClass          = C.PHIDCLASS_PHSENSOR
 	RFIDClass              = C.PHIDCLASS_RFID
@@ -49,8 +52,10 @@ const (
 	StepperClass           = C.PHIDCLASS_STEPPER
 	TemperatureSensorClass = C.PHIDCLASS_TEMPERATURESENSOR
 	TextLCDClass           = C.PHIDCLASS_TEXTLCD
-	TextLEDClass           = C.PHIDCLASS_TEXTLED
-	WeightSensorClass      = C.PHIDCLASS_WEIGHTSENSOR
+	VINTClass              = C.PHIDCLASS_VINT
+	GenericClass           = C.PHIDCLASS_GENERIC
+	FirmwareUpgradeClass   = C.PHIDCLASS_FIRMWAREUPGRADE
+	DictionaryClass        = C.PHIDCLASS_DICTIONARY
 )
 
 type ID int

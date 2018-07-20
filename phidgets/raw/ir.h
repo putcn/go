@@ -1,4 +1,4 @@
-#include <phidget21.h>
+#include <phidget22.h>
 #include <stdlib.h>
 #include "handler.h"
 
@@ -12,7 +12,7 @@ typedef struct onCodeResult {
 typedef struct onLearnResult {
   unsigned char *data;
   int dataLength;
-  CPhidgetIR_CodeInfoHandle codeInfo;
+  PhidgetIR_CodeInfo codeInfo;
 } onLearnResult;
 
 typedef struct onRawDataResult {
@@ -28,9 +28,9 @@ onCodeResult * onCodeAwait(handler *h);
 onLearnResult * onLearnAwait(handler *h);
 onRawDataResult * onRawDataAwait(handler *h);
 
-int setOnCodeHandler(CPhidgetIRHandle ir, handler *h);
-int setOnLearnHandler(CPhidgetIRHandle ir, handler *h);
-int setOnRawDataHandler(CPhidgetIRHandle ir, handler *h);
-void unsetOnCodeHandler(CPhidgetIRHandle ir);
-void unsetOnLearnHandler(CPhidgetIRHandle ir);
-void unsetOnRawDataHandler(CPhidgetIRHandle ir);
+int setOnCodeHandler(PhidgetIRHandle ir, handler *h);
+int setOnLearnHandler(PhidgetIRHandle ir, handler *h);
+int setOnRawDataHandler(PhidgetIRHandle ir, handler *h);
+void unsetOnCodeHandler(PhidgetIRHandle ir);
+void unsetOnLearnHandler(PhidgetIRHandle ir);
+void unsetOnRawDataHandler(PhidgetIRHandle ir);

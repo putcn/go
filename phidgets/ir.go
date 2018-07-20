@@ -1,7 +1,7 @@
 package phidgets
 
 import (
-	"github.com/samuelkadolph/go/phidgets/raw"
+	"github.com/putcn/go_phidgets/phidgets/raw"
 )
 
 type IR struct {

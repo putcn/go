@@ -1,4 +1,4 @@
-#include <phidget21.h>
+#include <phidget22.h>
 #include <pthread.h>
 
 typedef struct handlerNode {
