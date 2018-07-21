@@ -5,10 +5,6 @@ package raw
 // #include "logging.h"
 import "C"
 
-import (
-	"fmt"
-)
-
 type LogLevel int
 
 const (
@@ -21,13 +17,13 @@ const (
 )
 
 func DisableLogging() error {
-	return result(C.PhidgetLog_disable())
+	return result(C.int(C.PhidgetLog_disable()))
 }
 
 func EnableLogging(level LogLevel, path string) error {
-	return result(C.PhidgetLog_enable(C.Phidget_LogLevel(level), convertString(path)))
+	return nil
 }
 
 func Log(level LogLevel, format string, args ...interface{}) error {
-	return result(C._log(C.PhidgetLog_enable(level), convertString(fmt.Sprintf(format, args...))))
+	return nil
 }

@@ -39,7 +39,7 @@ const (
 	EncoderClass           = C.PHIDCLASS_ENCODER
 	FrequencyCounterClass  = C.PHIDCLASS_FREQUENCYCOUNTER
 	GPSClass               = C.PHIDCLASS_GPS
-	HubClass               = PHIDCLASS_HUB
+	HubClass               = C.PHIDCLASS_HUB
 	InterfaceKitClass      = C.PHIDCLASS_INTERFACEKIT
 	IRClass                = C.PHIDCLASS_IR
 	LEDClass               = C.PHIDCLASS_LED
@@ -93,7 +93,7 @@ const (
 	// Device1052    = C.PHIDID_ENCODER_1ENCODER_1INPUT
 	// Device1054    = C.PHIDID_ACCELEROMETER_2AXIS // PhidgetFrequencyCounter
 	// Device1054    = C.PHIDID_FREQUENCYCOUNTER_2INPUT
-	IRID = C.PHIDID_IR
+	IRID = C.PHIDID_1055
 	// Device1057    = C.PHIDID_ENCODER_HS_1ENCODER
 	// Device1058    = C.PHIDID_PHSENSOR
 	// Device1059    = C.PHIDID_ACCELEROMETER_3AXIS
@@ -133,7 +133,7 @@ type Phidget struct {
 	detached            chan bool
 	disconnected        chan bool
 	error               chan error
-	handle              C.CPhidgetHandle
+	handle              *C.PhidgetHandle
 	onAttachHandler     *C.handler
 	onConnectHandler    *C.handler
 	onDetachHandler     *C.handler
@@ -143,13 +143,13 @@ type Phidget struct {
 
 func ErrorDescription(code int) string {
 	str := new(*C.char)
-	C.CPhidget_getErrorDescription(C.int(code), str)
+	C.Phidget_getErrorDescription(C.PhidgetReturnCode(code), str)
 	return C.GoString(*str)
 }
 
 func LibraryVersion() (string, error) {
 	str := new(*C.char)
-	err := result(C.CPhidget_getLibraryVersion(str))
+	err := resultWithReturnCode(C.Phidget_getLibraryVersion(str))
 	if err != nil {
 		return "", err
 	}
@@ -157,12 +157,12 @@ func LibraryVersion() (string, error) {
 }
 
 func (p *Phidget) Close() error {
-	return result(C.CPhidget_close(p.handle))
+	return resultWithReturnCode(C.Phidget_close(p.handle))
 }
 
 func (p *Phidget) GetDeviceClass() (Class, error) {
-	ptr := new(C.CPhidget_DeviceClass)
-	err := result(C.CPhidget_getDeviceClass(p.handle, ptr))
+	ptr := new(C.Phidget_DeviceClass)
+	err := resultWithReturnCode(C.Phidget_getDeviceClass(p.handle, ptr))
 	if err != nil {
 		return 0, err
 	}
@@ -170,8 +170,8 @@ func (p *Phidget) GetDeviceClass() (Class, error) {
 }
 
 func (p *Phidget) GetDeviceID() (ID, error) {
-	ptr := new(C.CPhidget_DeviceID)
-	err := result(C.CPhidget_getDeviceID(p.handle, ptr))
+	ptr := new(C.Phidget_DeviceID)
+	err := resultWithReturnCode(C.Phidget_getDeviceID(p.handle, ptr))
 	if err != nil {
 		return 0, err
 	}
@@ -179,77 +179,85 @@ func (p *Phidget) GetDeviceID() (ID, error) {
 }
 
 func (p *Phidget) GetDeviceLabel() (string, error) {
-	return resultWithString(func(ptr **C.char) C.int { return C.CPhidget_getDeviceLabel(p.handle, ptr) })
+	return resultWithString(func(ptr **C.char) C.int { return C.int(C.Phidget_getDeviceLabel(p.handle, ptr)) })
 }
 
 func (p *Phidget) GetDeviceName() (string, error) {
-	return resultWithString(func(ptr **C.char) C.int { return C.CPhidget_getDeviceName(p.handle, ptr) })
+	return resultWithString(func(ptr **C.char) C.int { return C.int(C.Phidget_getDeviceName(p.handle, ptr)) })
 }
 
+/* Deprecated
 func (p *Phidget) GetDeviceStatus() (int, error) {
-	return resultWithInt(func(ptr *C.int) C.int { return C.CPhidget_getDeviceStatus(p.handle, ptr) })
+	return resultWithInt(func(ptr *C.int) C.int { return C.Phidget_getDeviceStatus(p.handle, ptr) })
 }
 
 func (p *Phidget) GetDeviceType() (string, error) {
-	return resultWithString(func(ptr **C.char) C.int { return C.CPhidget_getDeviceType(p.handle, ptr) })
+	return resultWithString(func(ptr **C.char) C.int { return C.Phidget_getDeviceType(p.handle, ptr) })
 }
-
+*/
 func (p *Phidget) GetDeviceVersion() (int, error) {
-	return resultWithInt(func(ptr *C.int) C.int { return C.CPhidget_getDeviceVersion(p.handle, ptr) })
+	return resultWithInt(func(ptr *C.int) C.int { return C.int(C.Phidget_getDeviceVersion(p.handle, ptr)) })
 }
 
 func (p *Phidget) GetSerialNumber() (int, error) {
-	return resultWithInt(func(ptr *C.int) C.int { return C.CPhidget_getSerialNumber(p.handle, ptr) })
+	return resultWithInt(func(ptr *C.int) C.int { return C.int(C.Phidget_getDeviceSerialNumber(p.handle, ptr)) })
 }
 
+/*
 func (p *Phidget) GetServerAddress() (string, int, error) {
 	addr := new(*C.char)
 	port := new(C.int)
-	err := result(C.CPhidget_getServerAddress(p.handle, addr, port))
+	err := result(C.Phidget_getServerAddress(p.handle, addr, port))
 	if err != nil {
 		return "", 0, err
 	}
 	return C.GoString(*addr), int(*port), nil
 }
 
+
 func (p *Phidget) GetServerID() (string, error) {
-	return resultWithString(func(ptr **C.char) C.int { return C.CPhidget_getServerID(p.handle, ptr) })
+	return resultWithString(func(ptr **C.char) C.int { return C.Phidget_getServerID(p.handle, ptr) })
 }
 
 func (p *Phidget) GetServerStatus() (int, error) {
-	return resultWithInt(func(ptr *C.int) C.int { return C.CPhidget_getServerStatus(p.handle, ptr) })
+	return resultWithInt(func(ptr *C.int) C.int { return C.Phidget_getServerStatus(p.handle, ptr) })
 }
+
+*/
 
 func (p *Phidget) Open(serial int) error {
-	return result(C.CPhidget_open(p.handle, C.int(serial)))
+	return resultWithReturnCode(C.Phidget_open(p.handle, C.int(serial)))
 }
 
+/*
+
 func (p *Phidget) OpenLabel(label string) error {
-	return result(C.CPhidget_openLabel(p.handle, convertString(label)))
+	return result(C.Phidget_openLabel(p.handle, convertString(label)))
 }
 
 func (p *Phidget) OpenLabelRemote(label, server, password string) error {
-	return result(C.CPhidget_openLabelRemote(p.handle, convertString(label), convertString(server), convertString(password)))
+	return result(C.Phidget_openLabelRemote(p.handle, convertString(label), convertString(server), convertString(password)))
 }
 
 func (p *Phidget) OpenLabelRemoteIP(label string, address string, port int, password string) error {
-	return result(C.CPhidget_openLabelRemoteIP(p.handle, convertString(label), convertString(address), C.int(port), convertString(password)))
+	return result(C.Phidget_openLabelRemoteIP(p.handle, convertString(label), convertString(address), C.int(port), convertString(password)))
 }
 
 func (p *Phidget) OpenRemote(serial int, server, password string) error {
-	return result(C.CPhidget_openRemote(p.handle, C.int(serial), convertString(server), convertString(password)))
+	return result(C.Phidget_openRemote(p.handle, C.int(serial), convertString(server), convertString(password)))
 }
 
 func (p *Phidget) OpenRemoteIP(serial int, address string, port int, password string) error {
-	return result(C.CPhidget_openRemoteIP(p.handle, C.int(serial), convertString(address), C.int(port), convertString(password)))
+	return result(C.Phidget_openRemoteIP(p.handle, C.int(serial), convertString(address), C.int(port), convertString(password)))
 }
+*/
 
 func (p *Phidget) SetDeviceLabel(label string) error {
-	return result(C.CPhidget_setDeviceLabel(p.handle, convertString(label)))
+	return resultWithReturnCode(C.Phidget_setDeviceLabel(p.handle, convertString(label)))
 }
 
 func (p *Phidget) WaitForAttachment(timeout time.Duration) error {
-	return result(C.CPhidget_waitForAttachment(p.handle, C.int(timeout/time.Millisecond)))
+	return resultWithReturnCode(C.Phidget_openWaitForAttachment(p.handle, C.uint32_t(timeout/time.Millisecond)))
 }
 
 func convertString(str string) *C.char {
@@ -259,12 +267,21 @@ func convertString(str string) *C.char {
 	return C.CString(str)
 }
 
-func result(result C.int) error {
-	code := int(result)
+func _result(code int) error {
 	if code != 0 {
 		return errors.New(fmt.Sprintf("%s (%d)", ErrorDescription(code), code))
 	}
 	return nil
+}
+
+func result(result C.int) error {
+	code := int(result)
+	return _result(code)
+}
+
+func resultWithReturnCode(result C.PhidgetReturnCode) error {
+	code := int(result)
+	return _result(code)
 }
 
 func resultWithInt(f func(*C.int) C.int) (int, error) {
@@ -291,10 +308,10 @@ func (p *Phidget) cleanup() {
 	p.unsetOnEventHandler(phidgetDetach, &p.onDetachHandler)
 	p.unsetOnEventHandler(phidgetConnect, &p.onConnectHandler)
 	p.unsetOnEventHandler(phidgetAttach, &p.onAttachHandler)
-	C.CPhidget_delete(p.handle)
+	C.Phidget_delete(p.handle)
 }
 
-func (p *Phidget) initPhidget(h C.CPhidgetHandle) error {
+func (p *Phidget) initPhidget(h *C.PhidgetHandle) error {
 	var err error
 
 	p.handle = h

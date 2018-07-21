@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <phidget22.h>
 #include <stdlib.h>
 #include "handler.h"
@@ -10,7 +11,7 @@ typedef enum {
 } eventType;
 
 typedef struct onErrorResult {
-  int code;
+  Phidget_ErrorEventCode code;
   const char * string;
 } onErrorResult;
 

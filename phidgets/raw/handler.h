@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <phidget22.h>
 #include <pthread.h>
 

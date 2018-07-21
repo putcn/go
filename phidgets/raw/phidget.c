@@ -12,7 +12,7 @@ void onEventAwait(handler *h) {
   handlerAwait(h);
 }
 
-int onErrorHandler(PhidgetHandle p, void *ptr, int code, const char *string) {
+int onErrorHandler(PhidgetHandle p, void *ptr, Phidget_ErrorEventCode code, const char *string) {
   handler * h = (handler *)ptr;
 
   onErrorResult * r = calloc(1, sizeof(onErrorResult));
@@ -38,11 +38,11 @@ int setOnEventHandler(PhidgetHandle p, handler *h, eventType t) {
     case phidgetAttach:
       return Phidget_setOnAttachHandler(p, &onEventHandler, h);
     case phidgetConnect:
-      return 1 //CPhidget_set_OnServerConnect_Handler(p, &onEventHandler, h);
+      return 1; //CPhidget_set_OnServerConnect_Handler(p, &onEventHandler, h);
     case phidgetDetach:
       return Phidget_setOnDetachHandler(p, &onEventHandler, h);
     case phidgetDisconnect:
-      return 1 //CPhidget_set_OnServerDisconnect_Handler(p, &onEventHandler, h);
+      return 1; //CPhidget_set_OnServerDisconnect_Handler(p, &onEventHandler, h);
   }
 }
 
@@ -55,10 +55,10 @@ void unsetOnEventHandler(PhidgetHandle p, eventType t) {
     case phidgetAttach:
       Phidget_setOnAttachHandler(p, NULL, NULL);
     case phidgetConnect:
-      //CPhidget_set_OnServerConnect_Handler(p, NULL, NULL);
+      ;//CPhidget_set_OnServerConnect_Handler(p, NULL, NULL);
     case phidgetDetach:
       Phidget_setOnDetachHandler(p, NULL, NULL);
     case phidgetDisconnect:
-      //CPhidget_set_OnServerDisconnect_Handler(p, NULL, NULL);
+      ;//CPhidget_set_OnServerDisconnect_Handler(p, NULL, NULL);
   }
 }
